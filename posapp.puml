@@ -1,0 +1,90 @@
+@startuml posapp
+entity Enterprise{
+    * EnterpriseID      : VARCHAR
+    --
+    EnterpriseName      : VARCHAR
+    NPWP                : VARCHAR
+    PIC                 : VARCHAR
+    RegisteredAddress   : VARCHAR
+    RegisteredPhone     : VARCHAR
+    BusinessAddress     : VARCHAR
+    BusinessPhone       : VARCHAR
+
+}
+entity Outlet{
+    * OutletID    : VARCHAR
+    --
+    OutletName    : VARCHAR
+    OutletAddress : VARCHAR
+    Platform      : VARCHAR
+}
+entity Employee{
+    * EmployeeID    : VARCHAR
+    --
+    EmployeeFirstName    : VARCHAR
+    EmployeeLastName     : VARCHAR
+    EmployeeAddress      : VARCHAR
+    EmployeePhone        : VARCHAR
+}
+entity InventoryControl{
+    * ProductID   : VARCHAR
+    * OutletID    : VARCHAR
+    --
+    Quantity      : VARCHAR
+}
+entity Product {
+    * ProductID : VARCHAR
+    --
+    ProductName : VARCHAR
+    Price       : VARCHAR
+    Desc        : TEXT
+}
+entity Order {
+    * OrderID   : VARCHAR
+    --
+    EmployeeID  : VARCHAR
+    OutletID    : VARCHAR
+    CustomerID  : VARCHAR
+    PaymentID   : VARCHAR
+    PromotionID : VARCHAR
+
+}
+entity OrderDetail{
+    * OrderID   : VARCHAR
+    * ProductID : VARCHAR
+    --
+    Quantity    : VARCHAR
+}
+entity PaymentMethod{
+    * PaymentID
+    --
+    PaymentName : VARCHAR
+    Desc        : TEXT
+    Status      : VARCHAR
+}
+entity Promotion{
+    * PromotionID : VARCHAR
+    --
+    PromotionCode : VARCHAR
+    Status        : VARCHAR
+}
+entity  Customer{
+    * CustomerID    : VARCHAR
+    --
+    CustomerName    : VARCHAR
+    CustomerAddress : VARCHAR
+}
+
+Enterprise ||--|{ Outlet : Opens
+Enterprise ||--|{ Employee : Recruits
+Outlet ||--|{ InventoryControl : Has
+Outlet ||--|{ Order : Registers
+Customer ||--|{ Order : Makes
+Employee ||--|{ Order : Registers
+Order ||--|{ OrderDetail : Has
+Order }|--|| Promotion : Assigns
+Order }|--|| PaymentMethod : Assigns
+OrderDetail }|--|{ Product : Contains
+InventoryControl }|--|{ Product : Manages
+@enduml
+
