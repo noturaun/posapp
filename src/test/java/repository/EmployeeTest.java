@@ -2,28 +2,19 @@ package repository;
 
 import com.github.javafaker.Faker;
 import com.noturaun.posapp.entity.Employee;
-import com.noturaun.posapp.repository.EmployeeRepository;
 import com.noturaun.posapp.repository.EmployeeRepositoryImpl;
 import com.noturaun.posapp.util.ConnectionUtil;
-import com.zaxxer.hikari.HikariDataSource;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import util.ConnectionTest;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeTest extends ConnectionTest {
 
-//    HikariDataSource dataSource;
-//    private EmployeeRepository employeeRepository;
     Faker faker = new Faker();
 
     @BeforeEach
@@ -93,21 +84,36 @@ public class EmployeeTest extends ConnectionTest {
 
     @Test
     void testGet() {
-        assertNotNull(employeeRepository.get(1));
-        System.out.println(employeeRepository.get(1).getFirstName());
+        assertNotNull(employeeRepository.get(3));
+        System.out.println(employeeRepository.get(3).getAddress());
     }
 
     @Test
-    void testConnection() {
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)){
-            System.out.println("Connection Established");
-        } catch (SQLException exception) {
-            fail(exception);
-        }
+    void testUpdate() {
+        Employee changes = new Employee();
+        changes.setFirstName("Opang");
+        changes.setLastName("Adit");
+        changes.setPhoneNumber("0852123456");
+        changes.setAddress("Tanggerang");
+        employeeRepository.update(3,changes);
+
+        Employee result = employeeRepository.get(3);
+        assertNotNull(result);
+        assertEquals("Tanggerang", employeeRepository.get(3).getAddress());
+        System.out.printf("""
+                firstname | lastname | phone | address
+                    %s          %s      %s      %s
+                """,
+                result.getFirstName(),
+                result.getLastName(),
+                result.getPhoneNumber(),
+                result.getAddress()
+                );
     }
 
-    @AfterEach
-    void tearDown() {
-        dataSource.close();
+    @Test
+    void testDelete() {
+        assertTrue(employeeRepository.delete(12));
+        assertNull(employeeRepository.get(12).getAddress());
     }
 }

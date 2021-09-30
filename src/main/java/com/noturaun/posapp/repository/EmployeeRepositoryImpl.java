@@ -7,10 +7,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.noturaun.posapp.util.Helper.isExist;
+
 public class EmployeeRepositoryImpl implements EmployeeRepository{
     private HikariDataSource dataSource;
-    public Employee[] employees = new Employee[10];
     private String sql;
+    private String table = "employees";
 
     public EmployeeRepositoryImpl(HikariDataSource dataSource) {
         this.dataSource = dataSource;
@@ -18,12 +20,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     @Override
     public Employee[] getAll() {
-        sql = "SELECT * FROM employees";
+        sql = "SELECT * FROM employees;";
         try(Connection connection = dataSource.getConnection()){
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            List<Employee> listOfEmployee = new ArrayList<>();
+            List<Employee> employees = new ArrayList<>();
             while (result.next()){
                 Employee employee = new Employee();
                 employee.setId(result.getInt("id"));
@@ -31,9 +33,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                 employee.setLastName(result.getString("lastName"));
                 employee.setPhoneNumber(result.getString("phone"));
                 employee.setAddress(result.getString("address"));
-                listOfEmployee.add(employee);
+                employees.add(employee);
             }
-            return listOfEmployee.toArray(new Employee[]{});
+            return employees.toArray(new Employee[]{});
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage());
         }
@@ -41,7 +43,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     @Override
     public Employee get(Integer employeeId) {
-        sql = "SELECT * FROM employees where id = ?";
+        sql = "SELECT * FROM employees where id = ?;";
         try(Connection connection = dataSource.getConnection()){
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -54,6 +56,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
                 employee.setFirstName(result.getString("firstName"));
                 employee.setLastName(result.getString("lastName"));
                 employee.setPhoneNumber(result.getString("phone"));
+                employee.setAddress(result.getString("address"));
             }
 
             return employee;
@@ -64,7 +67,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     @Override
     public void add(Employee employee) {
-        sql = "INSERT INTO employees(firstName, lastName, phone, address) values(?,?,?,?)";
+        sql = "INSERT INTO employees(firstName, lastName, phone, address) values(?,?,?,?);";
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, employee.getFirstName());
@@ -79,11 +82,47 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     @Override
     public void update(Integer employeeId, Employee changes) {
-
+        sql = """
+                UPDATE employees
+                SET firstName = ?,
+                    lastName = ?,
+                    phone = ?,
+                    address = ?
+                WHERE id = ? ;
+                """;
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, changes.getFirstName());
+            statement.setString(2, changes.getLastName());
+            statement.setString(3, changes.getPhoneNumber());
+            statement.setString(4, changes.getAddress());
+            statement.setInt(5, employeeId);
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
-    @Override
-    public void delete(Integer employeeId) {
 
+
+    @Override
+    public Boolean delete(Integer employeeId) {
+
+        if (isExist(dataSource, employeeId, table)){
+            sql = """
+                DELETE FROM employees
+                WHERE id = ? ;
+                """;
+            try(Connection connection = dataSource.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, employeeId);
+                statement.executeUpdate();
+            } catch (SQLException e){
+                throw new RuntimeException(e.getMessage());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -25,7 +25,7 @@ public class ConnectionTest {
     public String jdbcUrl;
     public String username;
     public String password;
-    public HikariDataSource dataSource;
+    public static HikariDataSource dataSource;
     public EmployeeRepository employeeRepository;
 
     @BeforeAll
@@ -39,6 +39,7 @@ public class ConnectionTest {
     }
 
     @BeforeEach
+    @Disabled
     void setUp() {
 //        rb = ResourceBundle.getBundle("db");
 //        jdbcUrl = rb.getString("jdbcUrl");
@@ -59,6 +60,7 @@ public class ConnectionTest {
 
 
     @ParameterizedTest
+    @Disabled
     @CsvSource(value = "Muhammad, Syahrul, 123456, Bogor")
     void testAddEmployee(String firstName, String lastName, String phone, String address) {
         Employee employee = new Employee();
@@ -72,6 +74,7 @@ public class ConnectionTest {
 
 
     @Test
+    @Disabled
     void testConnectionClose() {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
             System.out.println("Connection Established");
@@ -81,6 +84,7 @@ public class ConnectionTest {
     }
 
     @Test
+    @Disabled
     void testConnectionUsingHikari() throws SQLException {
         HikariDataSource dataSource = ConnectionUtil.getDatasource();
         Connection connection = dataSource.getConnection();
@@ -90,8 +94,8 @@ public class ConnectionTest {
         dataSource.close();
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void afterAll() {
         dataSource.close();
     }
 }

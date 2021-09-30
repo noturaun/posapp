@@ -7,5 +7,5 @@ public interface EmployeeRepository {
     Employee get(Integer employeeId);
     void add(Employee employee);
     void update(Integer employeeId, Employee changes);
-    void delete(Integer employeeId);
+    Boolean delete(Integer employeeId);
 }
