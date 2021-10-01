@@ -2,8 +2,11 @@ package util;
 
 import com.mysql.cj.jdbc.Driver;
 import com.noturaun.posapp.entity.Employee;
+import com.noturaun.posapp.entity.OrderDetail;
 import com.noturaun.posapp.repository.EmployeeRepository;
 import com.noturaun.posapp.repository.EmployeeRepositoryImpl;
+import com.noturaun.posapp.repository.OrderDetailRepository;
+import com.noturaun.posapp.repository.ProductRepository;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.*;
 import com.noturaun.posapp.util.ConnectionUtil;
@@ -27,6 +30,8 @@ public class ConnectionTest {
     public String password;
     public static HikariDataSource dataSource;
     public EmployeeRepository employeeRepository;
+    public ProductRepository productRepository;
+    public OrderDetailRepository orderDetailRepository;
 
     @BeforeAll
     static void beforeAll() {

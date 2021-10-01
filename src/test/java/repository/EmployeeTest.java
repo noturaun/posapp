@@ -67,14 +67,14 @@ public class EmployeeTest extends ConnectionTest {
     @Test
     void testGetAllEmployees() {
 
-        String x = """
+        String format = """
                      id | firstname | lastname | phone | address
                      %2s | %-9s | %-9s | %-10s | %s
                     ---------------------------------------------
                     """;
         assertNotNull(employeeRepository.getAll());
         for (var employee : employeeRepository.getAll()){
-            System.out.printf(x, employee.getId(),
+            System.out.printf(format, employee.getId(),
                     employee.getFirstName(),
                     employee.getLastName(),
                     employee.getPhoneNumber(),

@@ -14,7 +14,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private HikariDataSource dataSource;
     private String sql;
-    private String table = "employees";
 
     public ProductRepositoryImpl(HikariDataSource dataSource) {
         this.dataSource = dataSource;
@@ -33,6 +32,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.setId(result.getInt("id"));
                 product.setName(result.getString("name"));
                 product.setPrice(result.getInt("price"));
+                product.setDesc(result.getString("description"));
                 listOfProduct.add(product);
             }
             return listOfProduct.toArray(new Product[]{});
@@ -43,11 +43,13 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void add(Product product) {
-        sql = "INSERT INTO products(name, price) values(?,?);";
+//        sql = "INSERT INTO employees(firstName, lastName, phone, address) values(?,?,?,?);";
+        sql = "INSERT INTO products(name, price, description) values(?,?,?);";
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, product.getName());
             statement.setInt(2, product.getPrice());
+            statement.setString(3, product.getDesc());
             statement.executeUpdate();
         } catch (SQLException e){
             throw new RuntimeException(e.getMessage());
@@ -63,12 +65,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             statement.setInt(1,productId);
             ResultSet result = statement.executeQuery();
             Product product = new Product();
-            product.setId(result.getInt("id"));
 
-            while (result.next()){
-                product.setName(result.getString("firstName"));
-                product.setPrice(result.getInt("price"));
-            }
+
+                while (result.next()){
+                    product.setId(result.getInt("id"));
+                    product.setName(result.getString("name"));
+                    product.setPrice(result.getInt("price"));
+                    product.setDesc(result.getString("description"));
+                }
 
             return product;
         } catch (SQLException exception) {
@@ -77,8 +81,31 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public void update(Integer productId, Product changes) {
+        sql = """
+                UPDATE products
+                SET name = ?,
+                    price = ?,
+                    description = ?
+                WHERE id = ? ;
+                """;
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, changes.getName());
+            statement.setInt(2, changes.getPrice());
+            statement.setString(3,changes.getDesc());
+            statement.setInt(4, productId);
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public Boolean delete(Integer productId) {
-        if (isExist(dataSource, productId, table)){
+        String table = "employees";
+        String clause = "id";
+        if (isExist(dataSource, productId, table, clause)){
             sql = """
                 DELETE FROM products
                 WHERE id = ? ;

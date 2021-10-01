@@ -1,25 +1,25 @@
 package com.noturaun.posapp.entity;
 
 public class OrderDetail {
-    Integer id;
+    Integer orderId;
     Integer productId;
     Integer qty;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(Integer id, Integer productId, Integer qty) {
-        this.id = id;
+    public OrderDetail(Integer orderId, Integer productId, Integer qty) {
+        this.orderId = orderId;
         this.productId = productId;
         this.qty = qty;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     public Integer getProductId() {

@@ -12,7 +12,6 @@ import static com.noturaun.posapp.util.Helper.isExist;
 public class EmployeeRepositoryImpl implements EmployeeRepository{
     private HikariDataSource dataSource;
     private String sql;
-    private String table = "employees";
 
     public EmployeeRepositoryImpl(HikariDataSource dataSource) {
         this.dataSource = dataSource;
@@ -107,8 +106,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository{
 
     @Override
     public Boolean delete(Integer employeeId) {
+        String table = "employees";
+        String clause = "id";
 
-        if (isExist(dataSource, employeeId, table)){
+        if (isExist(dataSource, employeeId, table, clause)){
             sql = """
                 DELETE FROM employees
                 WHERE id = ? ;
