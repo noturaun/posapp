@@ -6,6 +6,6 @@ public interface CustomerRepository {
     Customer[] getAll();
     Customer get(Integer customerId);
     void create(Customer customer);
-    void update(Integer customerId, Customer customer);
-    void delete(Integer customerId);
+    void update(Integer customerId, Customer changes);
+    boolean delete(Integer customerId);
 }

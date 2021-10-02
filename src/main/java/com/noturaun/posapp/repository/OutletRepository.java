@@ -4,7 +4,8 @@ import com.noturaun.posapp.entity.Outlet;
 
 public interface OutletRepository {
     Outlet[] getAll();
+    Outlet get(Integer outletId);
     void add(Outlet outlet);
-    void updte(Integer outletId, Outlet changes);
-    void delete(Integer outletId);
+    void update(Integer outletId, Outlet changes);
+    boolean delete(Integer outletId);
 }
