@@ -31,6 +31,9 @@ public class ConnectionTest {
     public OrderDetailRepository orderDetailRepository;
     public OutletRepository outletRepository;
     public CustomerRepository customerRepository;
+    public PaymentMethodRepository paymentMethodRepository;
+    public PaymentRepository paymentRepository;
+    public InventoryControlRepository inventoryControlRepository;
 
     @BeforeAll
     static void beforeAll() {

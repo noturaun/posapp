@@ -1,10 +1,15 @@
+use posapp;
+
 show databases;
 
+show tables;
+
 create table payment_methods(
-	`payment_method_id` tinyint(5) not null auto_increment,
+	`id` tinyint(5) not null auto_increment,
     `name` varchar(30)  not null,
-    primary key(`payment_method_id`)
-) engine=InnoDB auto_increment=4;
+    `description` text,
+    primary key(`id`)
+) engine=InnoDB;
 
 drop table payment_methods;
 

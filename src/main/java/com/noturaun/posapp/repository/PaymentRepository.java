@@ -7,5 +7,5 @@ public interface PaymentRepository {
     Payment get(Integer paymentId);
     void create(Payment payment);
     void update(Integer paymentId, Payment changes);
-    void delete(Integer paymentId);
+    boolean delete(Integer paymentId);
 }

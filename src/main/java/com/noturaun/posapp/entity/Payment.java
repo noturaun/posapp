@@ -2,17 +2,15 @@ package com.noturaun.posapp.entity;
 
 public class Payment {
     Integer id;
-    String name;
-    String desc;
+    Integer paymentMethodId;
     String status;
 
     public Payment() {
     }
 
-    public Payment(Integer id, String name, String desc, String status) {
+    public Payment(Integer id, Integer paymentMethodId, String status) {
         this.id = id;
-        this.name = name;
-        this.desc = desc;
+        this.paymentMethodId = paymentMethodId;
         this.status = status;
     }
 
@@ -24,20 +22,12 @@ public class Payment {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getPaymentMethodId() {
+        return paymentMethodId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setPaymentMethodId(Integer paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     public String getStatus() {

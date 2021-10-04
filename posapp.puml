@@ -1,6 +1,6 @@
 @startuml posapp
 entity Enterprise{
-    * EnterpriseID      : VARCHAR
+    * EnterpriseID      : Integer
     --
     EnterpriseName      : VARCHAR
     NPWP                : VARCHAR
@@ -12,14 +12,14 @@ entity Enterprise{
 
 }
 entity Outlet{
-    * OutletID    : VARCHAR
+    * OutletID    : Integer
     --
     OutletName    : VARCHAR
     OutletAddress : VARCHAR
     Platform      : VARCHAR
 }
 entity Employee{
-    * EmployeeID    : VARCHAR
+    * EmployeeID    : Integer
     --
     EmployeeFirstName    : VARCHAR
     EmployeeLastName     : VARCHAR
@@ -27,20 +27,20 @@ entity Employee{
     EmployeePhone        : VARCHAR
 }
 entity InventoryControl{
-    * ProductID   : VARCHAR
-    * OutletID    : VARCHAR
+    * ProductID   : Integer
+    * OutletID    : Integer
     --
     Quantity      : VARCHAR
 }
 entity Product {
-    * ProductID : VARCHAR
+    * ProductID : Integer
     --
     ProductName : VARCHAR
     Price       : VARCHAR
     Desc        : TEXT
 }
 entity Order {
-    * OrderID   : VARCHAR
+    * OrderID   : Integer
     --
     EmployeeID  : VARCHAR
     OutletID    : VARCHAR
@@ -50,26 +50,33 @@ entity Order {
 
 }
 entity OrderDetail{
-    * OrderID   : VARCHAR
-    * ProductID : VARCHAR
+    * OrderID   : Integer
+    * ProductID : Integer
     --
     Quantity    : VARCHAR
 }
 entity PaymentMethod{
-    * PaymentID
+    * PaymentID : Integer
     --
     PaymentName : VARCHAR
     Desc        : TEXT
     Status      : VARCHAR
 }
+
+entity Payments{
+    * PaymentId : Integer
+    --
+    Status      : VARCHAR
+}
+
 entity Promotion{
-    * PromotionID : VARCHAR
+    * PromotionID : Integer
     --
     PromotionCode : VARCHAR
     Status        : VARCHAR
 }
 entity  Customer{
-    * CustomerID    : VARCHAR
+    * CustomerID    : Integer
     --
     CustomerName    : VARCHAR
     CustomerAddress : VARCHAR
@@ -83,7 +90,8 @@ Customer ||--|{ Order : Makes
 Employee ||--|{ Order : Registers
 Order ||--|{ OrderDetail : Has
 Order }|--|| Promotion : Assigns
-Order }|--|| PaymentMethod : Assigns
+Order ||--|| Payments : Assigns
+PaymentMethod ||--|{ Payments : Has
 OrderDetail }|--|{ Product : Contains
 InventoryControl }|--|{ Product : Manages
 @enduml
