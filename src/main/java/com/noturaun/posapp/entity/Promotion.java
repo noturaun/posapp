@@ -4,14 +4,16 @@ public class Promotion {
     Integer id;
     String promoCode;
     String status;
+    Double discount;
 
     public Promotion() {
     }
 
-    public Promotion(Integer id, String promoCode, String status) {
+    public Promotion(Integer id, String promoCode, String status, Double discount) {
         this.id = id;
         this.promoCode = promoCode;
         this.status = status;
+        this.discount = discount;
     }
 
     public Integer getId() {
@@ -36,5 +38,13 @@ public class Promotion {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 }

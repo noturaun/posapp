@@ -4,8 +4,8 @@ import com.noturaun.posapp.entity.Promotion;
 
 public interface PromotionRepository {
     Promotion[] getAll();
-    Promotion get();
+    Promotion get(Integer promoId);
     void create(Promotion promotion);
     void update(Integer promotionId, Promotion changes);
-    void delete(Integer promotionId);
+    boolean delete(Integer promotionId);
 }
